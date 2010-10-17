@@ -8,10 +8,21 @@ function! s:VSetSearch()
   let @s = temp
 endfunction
 
+function! visual_search#GrepCurrentWord()
+  let search = substitute(escape(expand('<cword>'), '\'), '\n', '\\n', 'g')
+  execute 'noautocmd vimgrep /'.search.'/ **'
+  copen
+endfunction
+
+function! visual_search#GrepSelection()
+  call <SID>VSetSearch()
+  execute 'noautocmd vimgrep /'.@/.'/ **' 
+  copen
+endfunction
+
 vmap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vmap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 " recursively vimgrep for word under cursor or selection if you hit leader-star
-nmap <leader>* :execute 'noautocmd vimgrep /\V' . substitute(escape(expand("<cword>"), '\'), '\n', '\\n', 'g') . '/ **'<CR>
-vmap <leader>* :<C-u>call <SID>VSetSearch()<CR>:execute 'noautocmd vimgrep /' . @/ . '/ **'<CR>
-
+nmap <leader>* :<C-u>call visual_search#GrepCurrentWord()<CR>
+vmap <leader>* :<C-u>call visual_search#GrepSelection()<CR>
