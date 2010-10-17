@@ -20,8 +20,8 @@ function! visual_search#GrepSelection()
   copen
 endfunction
 
-vmap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
-vmap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
+vnoremap # :<C-u>call <SID>VSetSearch()<CR>:set hls<CR>
+vnoremap * #
 
 " recursively vimgrep for word under cursor or selection if you hit leader-star
 nmap <leader>* :<C-u>call visual_search#GrepCurrentWord()<CR>
